@@ -1,5 +1,8 @@
 package sistemaDeArquivos;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 public class FilesStorage {
@@ -17,8 +20,7 @@ public class FilesStorage {
 			OutputStream outputStream = new FileOutputStream(this.getCurrentDirectoryFile(FILENAME));
 			InputStream fileToWrite = new FileInputStream(filePath);
 			int byteRead;
-			//TODO, verificar se os bytes vão caber no BUFFER. ARR de bytes
-			System.out.println("uhh" + this.checkIfFileFitsInBytesArray(filePath));
+			System.out.println("checkIfFileFitsInBytesArray index " + this.checkIfFileFitsInBytesArray(filePath));
 			while ((byteRead = fileToWrite.read()) != -1) {
                 outputStream.write(byteRead);
             }
@@ -40,7 +42,7 @@ public class FilesStorage {
 				if (this.headerBytes[i] == -1) {
 					continue;
 				}
-				System.out.println((char)this.headerBytes[i]);
+				System.out.println(" - " + (char)this.headerBytes[i]);
 			}
 			inputStream.close();
 			
@@ -64,8 +66,11 @@ public class FilesStorage {
 	}
 	
 	private int checkIfFileFitsInBytesArray(String filePath) {
-		this.getUpdatedByteArray();
-		System.out.println(this.headerBytes[0] + this.headerBytes[1] + this.headerBytes[2] + this.headerBytes[3]);
+		for (int a = 0; a < headerBytes.length; a++) {
+			if (this.headerBytes[a] == -1) continue;
+			System.out.println("i = " + a + " "+ "Byte = " + this.headerBytes[a]);
+		}
+		
 		try {
 			InputStream fileToWrite = new FileInputStream(filePath);
 			int fileSize = fileToWrite.available();
@@ -74,7 +79,7 @@ public class FilesStorage {
 				return -1;
 			}
 			
-			System.out.println("aqu" + fileSize);
+			System.out.println("checkIfFileFitsInBytesArray file size " + fileSize);
 			int i = 0;
 			for (i = 0; i < BUFFER_SIZE; i++) {
 				if (this.headerBytes[i] < 0) {
@@ -82,12 +87,13 @@ public class FilesStorage {
 					int size = 0;
 					for (j = i; j < fileSize; j++) {
 			          if (this.headerBytes[j] != -1) {
-			        	fileToWrite.close();
 			            break;
 			          }
 			          size++;
+			          System.out.println("size" + size);
 					}
 					if (size == fileSize) {
+						fileToWrite.close();
 						return i;
 					}
 				}
@@ -102,12 +108,14 @@ public class FilesStorage {
 		return -1;
 	}
 	
-	private boolean getUpdatedByteArray() {
+	public boolean getUpdatedByteArray() {
 		try {
 			InputStream binary = new FileInputStream(this.getCurrentDirectoryFile(FILENAME));
-			for (int i = 0; i < 4; i++) {
-//				this.headerBytes[i] = inputStream.read();
-				System.out.println("aa" + binary.read());
+			Path path = Paths.get(this.getCurrentDirectoryFile(FILENAME));
+			byte[] fileContents =  Files.readAllBytes(path);
+			System.out.println("UPDATE TAM - " + fileContents.length);
+			for (int i = 0; i < fileContents.length; i++) {
+				this.headerBytes[i] = binary.read();
 			}
 			binary.close();
 		} catch (IOException err) {
