@@ -7,8 +7,8 @@ public class Main {
 		Header header = loadHeader();
 		header.readlines();
 		FilesStorage fileStorage = new FilesStorage();
-		fileStorage.writeFile("teste.txt");
-//		fileStorage.readFile(0,3);
+		writeFile(fileStorage);
+		fileStorage.readFile(0,3);
 		int option = 1;
 		
 		while(option != 0) {
@@ -20,11 +20,18 @@ public class Main {
 	
 	public static void printInterface() {
 		System.out.println("1- Listar Arquivos");
+		System.out.println("2- Guardar Arquivo");
 		System.out.println("0- Sair");
 	}
 	
 	public static Header loadHeader() {
 		return new Header();
+	}
+	
+	public static boolean writeFile(FilesStorage fileStorage) {
+		fileStorage.getUpdatedByteArray();
+		fileStorage.writeFile("teste.txt");
+		return true;
 	}
 }
 
