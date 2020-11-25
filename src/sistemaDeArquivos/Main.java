@@ -7,8 +7,8 @@ public class Main {
 		Header header = loadHeader();
 		header.readlines();
 		FilesStorage fileStorage = new FilesStorage();
-		writeFile(fileStorage);
-		fileStorage.readFile(0,3);
+//		writeFile(fileStorage);
+		readFile(fileStorage);
 		int option = 1;
 		
 		while(option != 0) {
@@ -30,7 +30,15 @@ public class Main {
 	
 	public static boolean writeFile(FilesStorage fileStorage) {
 		fileStorage.getUpdatedByteArray();
-		fileStorage.writeFile("teste.txt");
+		int indexToWrite = fileStorage.checkIfFileFitsInBytesArray("teste.txt");
+		System.out.println("aaaaa = " +  indexToWrite);
+		fileStorage.writeFile("teste.txt", indexToWrite);
+		return true;
+	}
+	
+	public static boolean readFile(FilesStorage fileStorage) {
+		fileStorage.getUpdatedByteArray();
+		fileStorage.readFile(0,33);
 		return true;
 	}
 }
