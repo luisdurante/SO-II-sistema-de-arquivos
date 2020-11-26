@@ -29,7 +29,6 @@ public class FilesStorage {
 			while ((byteRead = fileToWrite.read()) != -1) {
 				headerBytes[indexToWrite] = byteRead;
 				indexToWrite++;
-//				System.out.println("byte = " + (byte)byteRead);
 			}
 			
 			for (int i = 0; i < BUFFER_SIZE; i++) {
@@ -37,6 +36,7 @@ public class FilesStorage {
 				if (headerBytes[i] != 0)
 				System.out.println(headerBytes[i]);
 			}
+			outputStream.close();
 			fileToWrite.close();
 			
 		} catch (IOException err) {
@@ -77,12 +77,48 @@ public class FilesStorage {
 		return projectDirectory + "\\src\\sistemaDeArquivos\\" + fileName;
 	}
 	
+	public boolean deleteFile(int initialBytePos, int finalBytePos) {
+		try {
+			OutputStream outputStream = new FileOutputStream(this.getCurrentDirectoryFile(FILENAME));
+			for (int i = initialBytePos; i < finalBytePos; i++) {
+				if (this.headerBytes[i] == 0) {
+					break;
+				}
+				this.headerBytes[i] = 0;
+			}
+			
+			for (int i = 0; i < BUFFER_SIZE; i++) {
+				outputStream.write(headerBytes[i]);
+				if (headerBytes[i] != 0)
+				System.out.println((char)headerBytes[i]);
+			}
+			outputStream.close();
+			
+		} catch (IOException err) {
+			System.out.println("Erro ao ler arquivo do sistema");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public int getFileSize(String fileName) {
+		String filePath = getCurrentDirectoryFile(fileName);
+		try {
+			InputStream fileToWrite = new FileInputStream(filePath);
+			int fileSize = fileToWrite.available();
+			fileToWrite.close();
+			return fileSize;
+		} catch (IOException err) {
+			System.out.println("Erro ao ler arquivo do sistema");
+			return -1;
+		}
+	}
+
+		
+	
 	public int checkIfFileFitsInBytesArray(String fileName) {
 		String filePath = getCurrentDirectoryFile(fileName);
-//		for (int a = 0; a < headerBytes.length; a++) {
-//			if (this.headerBytes[a] == 0) continue;
-//			System.out.println("i = " + a + " "+ "Byte = " + this.headerBytes[a]);
-//		}
 		
 		try {
 			InputStream fileToWrite = new FileInputStream(filePath);
@@ -92,7 +128,6 @@ public class FilesStorage {
 				return -1;
 			}
 			
-//			System.out.println("checkIfFileFitsInBytesArray file size " + fileSize);
 			int i = 0;
 			for (i = 0; i < BUFFER_SIZE; i++) {
 				if (this.headerBytes[i] == 0) {
