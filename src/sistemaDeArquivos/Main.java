@@ -1,21 +1,33 @@
 package sistemaDeArquivos;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-		Header header = loadHeader();
+		Header header = new Header();
 		header.readlines();
 		FilesStorage fileStorage = new FilesStorage();
-//		writeFile(fileStorage, "HSH.sql");
+		writeFile(fileStorage, header, "teste.txt");
 		readFile(fileStorage);
-//		deleteFile(fileStorage);
+		deleteFile(fileStorage);
 		int option = 1;
 		
 		while(option != 0) {
 			printInterface();
 			option = scanner.nextInt();
+			
+			switch (option) {
+			case 1:
+				header.showFiles();
+				break;
+
+			default:
+				break;
+			}
 		}
+		header.saveHeaderFile();
 		scanner.close();
 	}
 	
@@ -27,16 +39,18 @@ public class Main {
 		System.out.println("0- Sair");
 	}
 	
-	public static Header loadHeader() {
+	public static Header loadHeader() throws FileNotFoundException {
 		return new Header();
 	}
 	
-	public static boolean writeFile(FilesStorage fileStorage, String fileName) {
+	public static boolean writeFile(FilesStorage fileStorage, Header header, String fileName) throws IOException {
 		fileStorage.getUpdatedByteArray();
 		int indexToWrite = fileStorage.checkIfFileFitsInBytesArray(fileName);
 		int fileSize = fileStorage.getFileSize(fileName);
 		System.out.println("index = "+ indexToWrite + " size = " + fileSize);
 		fileStorage.writeFile(fileName, indexToWrite);
+		System.out.println("VOU GRAVAR NO HEADER");
+		header.addFile(fileName, fileSize, indexToWrite);
 		return true;
 	}
 	
