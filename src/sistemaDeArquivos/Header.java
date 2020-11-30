@@ -30,7 +30,10 @@ public class Header {
 	}
 	
 	public void showFiles() {
-		this.contentFile.forEach(file -> System.out.println(file));
+		for (int i = 0; i < this.contentFile.size(); i++) {
+			String filename = this.contentFile.get(i).split(";")[0];
+			System.out.println(i + " - " + filename);
+		}
 	}
 	
 	public void addFile(String filename, int size, int position)throws IOException {
@@ -38,13 +41,38 @@ public class Header {
 		this.contentFile.add(file);
 	}
 	
-	public void deleteFile(int position) {
-		this.contentFile.remove(position);
+	public int getInitialPositionFile(String file) {
+		return Integer.parseInt(file.split(";")[2]);
+	}
+	
+	public int getFinalPositionFile(String file) {
+		return Integer.parseInt(file.split(";")[1]) + getInitialPositionFile(file);
+	}
+	
+	public String getFilename(String file) {
+		return file.split(";")[0];
+	}
+	
+	public void deleteFile(int index) {
+		this.contentFile.remove(index);
+	}
+	
+	public String readFile(int index) {
+		String file = this.contentFile.get(index);
+		if(!this.getFilename(file).contains(".txt")) {
+			System.out.println("Arquivo precisa ser .txt");
+			return "";
+		}
+		return this.contentFile.get(index);
 	}
 	
 	public void saveHeaderFile() {
 		this.contentFile.forEach(file -> this.pw.println(file));
 		this.close();
+	}
+	
+	public int getListOfFilesSize() {
+		return this.contentFile.size();
 	}
 	
 	private void close() {
