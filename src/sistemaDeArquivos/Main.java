@@ -1,5 +1,5 @@
 package sistemaDeArquivos;
-import java.io.FileNotFoundException;
+//import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -9,9 +9,9 @@ public class Main {
 		Header header = new Header();
 		header.readlines();
 		FilesStorage fileStorage = new FilesStorage();
-		writeFile(fileStorage, header, "teste.txt");
-		readFile(fileStorage);
-		deleteFile(fileStorage);
+//		writeFile(fileStorage, header, "teste.txt");
+//		readFile(fileStorage);
+//		deleteFile(fileStorage);
 		int option = 1;
 		
 		while(option != 0) {
@@ -21,6 +21,36 @@ public class Main {
 			switch (option) {
 			case 1:
 				header.showFiles();
+				break;
+			case 2:
+				header.showFiles();
+				boolean indexIsValid = false;
+				int indexFile = 0;
+				
+				while(!indexIsValid) {					
+					System.out.print("\nDigite o índice do arquivo que deseja ler (para voltar a listagem digite -1): ");
+					indexFile = scanner.nextInt();
+					
+					indexIsValid = indexFile >= -1 && indexFile <= header.getListOfFilesSize() - 1;
+					if(!indexIsValid) {
+						System.out.println("Índice inválido");
+					}
+				}
+				
+				if(indexFile != -1) {
+					String file = header.readFile(indexFile);
+					
+					if(file != "") {						
+						readFile(fileStorage, header.getInitialPositionFile(file), header.getFinalPositionFile(file));
+					}
+				
+				}
+				
+				break;
+			case 3:
+				System.out.print("Digite o nome do arquivo com a extensão: ");
+				String fileName = scanner.next();
+				writeFile(fileStorage, header, fileName);
 				break;
 
 			default:
@@ -39,7 +69,7 @@ public class Main {
 		System.out.println("0- Sair");
 	}
 	
-	public static Header loadHeader() throws FileNotFoundException {
+	public static Header loadHeader() throws IOException {
 		return new Header();
 	}
 	
@@ -54,9 +84,9 @@ public class Main {
 		return true;
 	}
 	
-	public static boolean readFile(FilesStorage fileStorage) {
+	public static boolean readFile(FilesStorage fileStorage, int initialPosition, int finalPosition) {
 		fileStorage.getUpdatedByteArray();
-		fileStorage.readFile(2,30);
+		fileStorage.readFile(initialPosition, finalPosition);
 		return true;
 	}
 	
