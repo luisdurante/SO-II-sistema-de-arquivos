@@ -14,14 +14,16 @@ public class Header {
 	private ArrayList<String> contentFile = new ArrayList<>();
 	
 	public Header() throws FileNotFoundException {
-//		String projectDirectory = System.getProperty("user.dir");
-//		String filePath = projectDirectory + "//src//sistemaDeArquivos//"+ FILENAME;
-		this.file = new File(FILENAME);
-		this.sc = new Scanner(this.file);
-		this.pw = new PrintWriter(this.file);
+		String projectDirectory = System.getProperty("user.dir");
+		String filePath = projectDirectory + "//src//sistemaDeArquivos//"+ FILENAME;
+		this.file = new File(filePath);
+
 	}
 	
-	public void readlines() {
+	public void readlines() throws FileNotFoundException {
+		this.sc = new Scanner(this.file);
+		this.pw = new PrintWriter(this.file);
+		
 		while(this.sc.hasNextLine()) {
 			this.contentFile.add(this.sc.nextLine());
 		}
@@ -40,10 +42,8 @@ public class Header {
 		this.contentFile.remove(position);
 	}
 	
-	public void writeFile() {
-		for (String file : this.contentFile) {
-			this.pw.println(file);
-		}
+	public void saveHeaderFile() {
+		this.contentFile.forEach(file -> this.pw.println(file));
 		this.close();
 	}
 	
