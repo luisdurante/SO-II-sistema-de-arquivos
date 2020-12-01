@@ -25,7 +25,6 @@ public class FilesStorage {
 			OutputStream outputStream = new FileOutputStream(this.getCurrentDirectoryFile(FILENAME));
 			InputStream fileToWrite = new FileInputStream(filePath);
 			int byteRead;
-			System.out.println("tam arq = " + fileToWrite.available() + " index = " + indexToWrite);
 			while ((byteRead = fileToWrite.read()) != -1) {
 				headerBytes[indexToWrite] = byteRead;
 				indexToWrite++;
@@ -33,8 +32,6 @@ public class FilesStorage {
 			
 			for (int i = 0; i < BUFFER_SIZE; i++) {
 				outputStream.write(headerBytes[i]);
-				if (headerBytes[i] != 0)
-				System.out.println(headerBytes[i]);
 			}
 			outputStream.close();
 			fileToWrite.close();
@@ -89,8 +86,6 @@ public class FilesStorage {
 			
 			for (int i = 0; i < BUFFER_SIZE; i++) {
 				outputStream.write(headerBytes[i]);
-				if (headerBytes[i] != 0)
-				System.out.println((char)headerBytes[i]);
 			}
 			outputStream.close();
 			
@@ -131,7 +126,6 @@ public class FilesStorage {
 			int i = 0;
 			for (i = 0; i < BUFFER_SIZE; i++) {
 				if (this.headerBytes[i] == 0) {
-					System.out.println("a = " + this.headerBytes[i]);
 					int j = 0;
 					int size = 0;
 					for (j = i; j < j + BUFFER_SIZE; j++) {
@@ -158,7 +152,6 @@ public class FilesStorage {
 			InputStream binary = new FileInputStream(this.getCurrentDirectoryFile(FILENAME));
 			Path path = Paths.get(this.getCurrentDirectoryFile(FILENAME));
 			byte[] fileContents =  Files.readAllBytes(path);
-			System.out.println("UPDATE TAM - " + fileContents.length);
 			for (int i = 0; i < fileContents.length; i++) {
 				this.headerBytes[i] =  binary.read();
 			}
