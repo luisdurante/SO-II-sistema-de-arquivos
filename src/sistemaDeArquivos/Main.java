@@ -1,5 +1,4 @@
 package sistemaDeArquivos;
-//import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -9,9 +8,6 @@ public class Main {
 		Header header = new Header();
 		header.readlines();
 		FilesStorage fileStorage = new FilesStorage();
-//		writeFile(fileStorage, header, "teste.txt");
-//		readFile(fileStorage);
-//		deleteFile(fileStorage);
 		int option = 1;
 		
 		while(option != 0) {
@@ -23,7 +19,9 @@ public class Main {
 			switch (option) {
 			
 			case 1:
+				System.out.println("\n");
 				header.showFiles();
+				System.out.println("\n");
 				break;
 			case 2:
 				header.showFiles();
@@ -103,15 +101,18 @@ public class Main {
 		int indexToWrite = fileStorage.checkIfFileFitsInBytesArray(fileName);
 		int fileSize = fileStorage.getFileSize(fileName);
 		System.out.println("index = "+ indexToWrite + " size = " + fileSize);
-		fileStorage.writeFile(fileName, indexToWrite);
-		System.out.println("VOU GRAVAR NO HEADER");
-		header.addFile(fileName, fileSize, indexToWrite);
+		if (indexToWrite != -1) {
+			fileStorage.writeFile(fileName, indexToWrite);
+			header.addFile(fileName, fileSize, indexToWrite);			
+		}
 		return true;
 	}
 	
 	public static boolean readFile(FilesStorage fileStorage, int initialPosition, int finalPosition) {
+		System.out.println("\n\n");
 		fileStorage.getUpdatedByteArray();
 		fileStorage.readFile(initialPosition, finalPosition);
+		System.out.println("\n\n");
 		return true;
 	}
 	
