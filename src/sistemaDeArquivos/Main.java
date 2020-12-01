@@ -17,15 +17,18 @@ public class Main {
 		while(option != 0) {
 			printInterface();
 			option = scanner.nextInt();
+			boolean indexIsValid = false;
+			int indexFile = 0;
 			
 			switch (option) {
+			
 			case 1:
 				header.showFiles();
 				break;
 			case 2:
 				header.showFiles();
-				boolean indexIsValid = false;
-				int indexFile = 0;
+				indexIsValid = false;
+				indexFile = 0;
 				
 				while(!indexIsValid) {					
 					System.out.print("\nDigite o índice do arquivo que deseja ler (para voltar a listagem digite -1): ");
@@ -51,6 +54,28 @@ public class Main {
 				System.out.print("Digite o nome do arquivo com a extensão: ");
 				String fileName = scanner.next();
 				writeFile(fileStorage, header, fileName);
+				break;
+				
+			case 4:
+				header.showFiles();
+
+				while(!indexIsValid) {					
+					System.out.print("\nDigite o índice do arquivo que deseja remover (para voltar a listagem digite -1): ");
+					indexFile = scanner.nextInt();
+					
+					indexIsValid = indexFile >= -1 && indexFile <= header.getListOfFilesSize() - 1;
+					if(!indexIsValid) {
+						System.out.println("Índice inválido");
+					}
+				}
+				
+				if(indexFile != -1) {
+					String file = header.readFile(indexFile);
+					
+					if(file != "") {						
+						deleteFile(fileStorage, header, indexFile, header.getInitialPositionFile(file), header.getFinalPositionFile(file));
+					}
+				}
 				break;
 
 			default:
@@ -90,9 +115,10 @@ public class Main {
 		return true;
 	}
 	
-	public static boolean deleteFile(FilesStorage fileStorage) {
+	public static boolean deleteFile(FilesStorage fileStorage, Header header, int indexFile, int initialPosition, int finalPosition) {
 		fileStorage.getUpdatedByteArray();
-		fileStorage.deleteFile(1,2);
+		fileStorage.deleteFile(initialPosition,finalPosition);
+		header.deleteFile(indexFile);
 		return true;
 	}
 	
