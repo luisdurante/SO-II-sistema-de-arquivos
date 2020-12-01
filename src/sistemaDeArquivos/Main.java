@@ -100,7 +100,6 @@ public class Main {
 		fileStorage.getUpdatedByteArray();
 		int indexToWrite = fileStorage.checkIfFileFitsInBytesArray(fileName);
 		int fileSize = fileStorage.getFileSize(fileName);
-		System.out.println("index = "+ indexToWrite + " size = " + fileSize);
 		if (indexToWrite != -1) {
 			fileStorage.writeFile(fileName, indexToWrite);
 			header.addFile(fileName, fileSize, indexToWrite);			
