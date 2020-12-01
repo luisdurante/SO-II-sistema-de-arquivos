@@ -54,7 +54,7 @@ public class FilesStorage {
 				if (this.headerBytes[i] == 0) {
 					break;
 				}
-				System.out.println(" - " + (char)this.headerBytes[i]);
+				System.out.print((char)this.headerBytes[i]);
 			}
 			inputStream.close();
 			
@@ -74,7 +74,7 @@ public class FilesStorage {
 	
 	public String getCurrentDirectoryFile(String fileName) {
 		String projectDirectory = System.getProperty("user.dir");
-		return projectDirectory + "\\src\\sistemaDeArquivos\\" + fileName;
+		return projectDirectory + "//src//sistemaDeArquivos//" + fileName;
 	}
 	
 	public boolean deleteFile(int initialBytePos, int finalBytePos) {
